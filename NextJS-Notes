@@ -1,0 +1,656 @@
+What is NextJS?
+A React Framework For building fullstack react framework
+Handles route setuo and config. Handles requests and responses. Handles data fetching and submission
+
+Key Features
+Fullstack Apps
+NextJS blends frontend+backend (in the same project)
+Advantage: Frontend and backend tasks are part of the same project
+
+File-Based routing
+Routes are configured via the filesystem(folder+files)
+Advantage: No code-based configuration or extra packages for routing required
+
+Server Side Rendering
+By defualt next renders all the pages on the server unlike react which has empty html when it receive from the server
+Advantage: The finished HTML page(including content) is sent to the client (great for SEO)
+
+------------------03-Essentials of NEXT JS-------------------------
+
+In Next if you want to add a route you create a folder of that route and in that add page.js file which tells next that this is and page which should be used as a route so page,layout, not-found and error are reserved keyword for file
+
+page.js-> Define page content
+layout.js-> Define wrapper around pages
+not-found.js-> Define "Not Found" fallback page
+error.js-> Define "Error" fallback page
+
+On first load we get a fully rendered html file from server so the rendering happens on server side for the first time and after that all the spa is handle via client side (browser)
+
+You need atleast on layout file in the app folder because that is like a wrapper around your pages. Also if you want a nested layout for some other routes you can go into that route folder and create layout.js so that will be applicable to that folder only
+
+Head section in the layout.js is handle by metadata variable which is also a reserved name in next
+
+import './globals.css'
+
+export const metadata = {
+  title: 'NextJS Course App',
+  description: 'Your first NextJS app!',
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+
+As you already learned, there are some reserved filenames when working with NextJS.
+
+Important: These filenames are only reserved when creating them inside of the app/ folder (or any subfolder). Outside of the app/ folder, these filenames are not treated in any special way.
+
+Here's a list of reserved filenames in NextJS - you'll, of course, learn about the important ones throughout this section:
+
+page.js => Create a new page (e.g., app/about/page.js creates a <your-domain>/about page)
+
+layout.js => Create a new layout that wraps sibling and nested pages
+
+not-found.js => Fallback page for "Not Found" errors (thrown by sibling or nested pages or layouts)
+
+error.js => Fallback page for other errors (thrown by sibling pages or nested pages or layouts)
+
+loading.js => Fallback page which is shown whilst sibling or nested pages (or layouts) are fetching data
+
+route.js => Allows you to create an API route (i.e., a page which does NOT return JSX code but instead data, e.g., in the JSON format)
+
+Always remember the file which you're using like inbuilt files like loading error page or layout will be applicable to its level and its child not above that
+
+You also find a list with all supported filenames & detailed explanations in the official docs: https://nextjs.org/docs/app/api-reference/file-conventions
+
+"DYNAMIC ROUTES":
+For dynamic routes we need to add a placeholder a slug which will become that dynamic id which tells next that we are not sure what that dynamic route would be so we add a placeholder
+e.g.
+
+app->blog
+
+so blog is one route over here where we need to add dynamic route to it
+
+so folder structure would be like this
+
+blog(folder)->page.js which will open the blog page and in blog folder we will add [slug]->page.js this folder so if we write blog/post-1 it will go to blog/[slug]=post-1 (final url will be blog/post-1 the one I have added before this bracket is just for presentation purpose)and will open its page.js(slug's page.js)
+
+In the Next.js App Router, a slug is a dynamic part of the URL that maps to a folder name wrapped in square brackets.
+
+app/
+ └── blog/
+      └── [slug]/
+           └── page.js
+           
+Accessing the Slug
+
+In App Router, the slug comes through params.
+
+export default function BlogPost({ params }) {
+  return <h1>{params.slug}</h1>;
+}
+
+If user visits:
+
+/blog/nextjs-routing
+
+Then:
+
+params.slug === "nextjs-routing"  
+
+Image Tag in next:
+It optimizes your image by setting srcset the loading property and also it optimizes the image to serve as webp for supported browser
+
+By default all React components in nextjs app are RSC components that are only rendered on the server.
+Advantage: Less client-side JS, great for SEO.
+
+Even though you are navigating in the spa it will still execute your function on server side and will client will receive and rendered html. The backend executes the server component function and hence derives the to-be-rendered html code-> the client side receives and renders the to-be-rendered HTML code
+
+Client Components: Components that are pre-rendered on the server but then also potentially on the client. useState and useEffect hook are not available on the server side. Also the events handler will not be available on the server side
+
+In order to get the current path in nextJs we can use usePathname hook which gives you the pathname
+const path=usePathname()
+
+
+you can use use client to convert a server component to client component but you should try to keep that as deep in component tree as possible so that you only turn the component that need to be converted to client component so that majority of your components will stay server component and are rendered on the server so that you don't loose server component advantages for most of your components
+
+
+notFound() if in case you want to show and error or not found because the data you were loading didn't load then you can use this notFound() it will return the closes not-found or error page
+ 
+**Server actions for handling form submission:**
+
+when submitting a form in react we use to use useActionState() and then use to add that action function to onSubmit of the form and then use to manually call an api to post that data. But in next we can use server action to submit the form to the backend.
+
+**But Please note: You can only use this if your component is a server component and not a client component. In order to use server actions in client component you will have to out source that function in to some another file (maybe an util) and then add "use server" directive in that file and then you can simply import that function in your client component and can use it as a server action.
+
+You will have to create and action function which will be async
+
+async function shareMeal(formData){
+	"use server" //this is the keywor which enables us to use this function as server actions
+	//Your logic...
+}
+
+so now we can simply use this function on form's action property
+
+<form action={shareMeal}/>
+
+In prodution by default it pre generates the pages and cache it so next time we want the page it will server that page from cache so if there is any new item added dynamically it will still show you the cached static pages which were generated during the build process.
+
+So in order to fix it you need to revaildate you can do it using 
+    revalidatePath("/meals","layout"); by default it will only revalidate that particular page and not its nested routes so you need to use the above arguments to make all the nested childs revalidate the cache
+    
+We should always upload the images on the storage like s3 or soemthing
+
+
+You can add metadata to each and every page however you don't have to if there is a common metadata which is for whole project you can directly add that to layout.js at root level inside app folder. But if you need to have specific metadata on certain pages you can export const metadata object and can add details in here. Please remember: The metadata inisde the pages will win over the global metadata if there are same property or else it will receive the missing meta data property from the root layout
+
+If there is metadata that should apply to the entire application (for example, a default title, description, or favicon), you can define it in the root layout.js or layout.tsx file inside the app folder.
+
+For pages that need their own specific metadata, you can export a metadata object directly from that page file.
+
+Example:
+
+export const metadata = {
+  title: 'Meals Page',
+  description: 'Browse delicious meals',
+};
+
+Important:
+
+Page-level metadata overrides root layout metadata when both define the same property.
+Any metadata properties not defined on the page are inherited from the parent layout metadata.
+
+So Next.js merges metadata hierarchically, with more specific metadata taking precedence.
+
+How to generate metadata for dynamic routes?
+You can use generateMetadata function. SO nextjs looks for metadata constant if not found it looks for generateMetadata function remeber it should be async
+
+export async function generateMetadata({ params }) {
+  const meal = await getMeal(params.mealSlug)
+  return {
+    title: meal.title,
+    description: meal.summary
+  }
+}
+
+
+SUSPENSE use case for granular loading state handling
+
+import Link from 'next/link'
+import React, { Suspense } from 'react'
+import classes from "./page.module.css"
+import MealsGrid from '@/components/meals/meals-grid';
+import { getMeals } from '@/lib/meals';
+
+export const metadata = {
+  title: 'All Meals',
+  description: 'Browse the delicious meals shared by our vibrant community.',
+};
+
+async function Meals() {
+    const meals = await getMeals()
+    return (<MealsGrid meals={meals} />)
+}
+
+
+
+function MealsPage() {
+    return (
+        <>
+            <header className={classes.header}>
+                <h1>
+                    Delicious meals, created{' '}<span className={classes.highlight}>by you</span>
+                </h1>
+                <p>
+                    Choose your favroite recipe and cook it yourself. Its is easy and fun.
+                </p>
+                <p className={classes.cta}>
+                    <Link href="/meals/share">
+                        Share Your Favroite Recipe
+                    </Link>
+                </p>
+            </header>
+            <main className={classes.main}>
+
+                <Suspense fallback={<p className={classes.loading}>Fetching meals...</p>}><Meals /></Suspense>
+            </main>
+        </>
+    )
+}
+
+export default MealsPage
+
+
+**Parallel Routes** in Next.js allow you to render multiple pages or route segments simultaneously within the same layout using named slots (`@folderName`).
+
+### Use Cases of Parallel Routes
+
+* Display multiple independent sections on the same page.
+* Build dashboards with separate panels/widgets.
+* Show side-by-side content like:
+
+  * latest news + archived news
+  * analytics + notifications
+  * chat list + chat window
+* Create modal routes without leaving the current page.
+* Load different parts of the UI independently for better user experience.
+
+Your folder structure should look like this:
+
+```txt
+app
+ └── archive
+      ├── @archive
+      │     └── page.js
+      ├── @latest
+      │     └── page.js
+      └── layout.js
+```
+
+And your `layout.js` can receive both slots as props:
+
+```jsx
+import React from 'react'
+
+function ArchiveLayout({ archive, latest }) {
+  return (
+    <div>
+      <h1>News Archive</h1>
+
+      <section id="archive-filter">
+        {archive}
+      </section>
+
+      <section id="archive-latest">
+        {latest}
+      </section>
+    </div>
+  )
+}
+
+export default ArchiveLayout
+```
+
+A few important clarifications:
+
+* `@archive` and `@latest` are **parallel route slots**, not actual URL segments.
+* The URL will still be `/archive`.
+* Each slot renders its own `page.js`.
+* The slot name (`archive`, `latest`) becomes the prop name in `layout.js`.
+
+Example:
+
+```txt
+@archive  → archive prop
+@latest   → latest prop
+```
+
+So this part is correct:
+
+```jsx
+function ArchiveLayout({ archive, latest })
+```
+
+One thing to remember:
+If you want a default UI when a slot is inactive, you should add a `default.js` inside the slot folder.
+
+Example:
+
+```txt
+@archive
+   ├── page.js
+   └── default.js
+```
+
+Otherwise Next.js may show a 404 for unmatched slots during navigation.
+
+All the parallel routes that are shown should support all the different paths you wanna support there the folder structure of all the parallel routes within that folder should have same nested structure so if your don't want to do that then next provides you a fallback page which we can show. Its file should be name as default.js so in case the url doesn't match for that particular slot it will use the default.js of that not matched slot
+
+
+** Catch-ALL 
+
+A catch-all route in Next.js is a dynamic route that captures multiple URL segments into a single parameter using ....
+
+Example folder:
+
+[...slug]
+
+It matches routes like:
+
+/blog/react
+/blog/react/hooks
+/blog/2025/may/article
+
+The captured segments are available as an array:
+
+params.slug
+
+Example output:
+
+["react", "hooks"]
+Use Cases
+Documentation pages
+Nested blog categories
+Dynamic filters
+File/path-based routing
+Multi-level URLs
+Difference Between Catch-All and Optional Catch-All
+Catch-All
+[...slug]
+
+Matches:
+
+/blog/react
+/blog/a/b
+
+Does NOT match:
+
+/blog
+Optional Catch-All
+[[...slug]]
+
+Matches:
+
+/blog
+/blog/react
+/blog/a/b
+
+catch-All literally catches all your routes and handle in one page
+
+In parallel route if you want to have one default page of that particular folder you can use children in layout so that folder's page.js will be children and you just have to create one parallel route slot
+
+
+Intercepted Routes in Next.js allow you to load a route inside the current layout instead of fully navigating away from the page.
+
+They are mainly used for:
+
+Modals
+Side panels
+Overlays
+Preview screens
+
+This helps preserve the background page while showing another route on top.
+
+
+In Next.js, **Intercepting Routes** combined with **Parallel Routes** allow you to load a route from another part of your application inside the current layout (e.g., as a modal) when navigating on the client, while still serving the standard full-page view upon direct refresh or deep linking.
+
+Here is a step-by-step breakdown of how this specific setup is working in your `news` folder structure.
+
+---
+
+### 1. The Directory Structure
+
+Your folder structure is configured as follows under `app/news/[newsSlug]`:
+
+```text
+app/news/[newsSlug]/
+├── @modal/                         # Parallel route slot
+│   ├── (.)image/                   # Intercepting route (same-level sibling 'image')
+│   │   └── page.js                 # Modal/Dialog component shown when intercepted
+│   └── default.js                  # Returns null so slot is empty when no modal active
+├── image/                          # The standard standalone page directory
+│   └── page.js                     # The fallback full-screen page for direct URL visits
+├── layout.js                       # Combines the parallel slot {modal} and main {children}
+├── not-found.js
+└── page.js                         # News details article page
+```
+
+---
+
+### 2. How the Layout Combines the Views (`layout.js`)
+
+Your layout inside `app/news/[newsSlug]/layout.js` uses **Parallel Routing**:
+
+```javascript
+function NewsDeatilLayout({ modal, children }) {
+  return (
+    <>
+      {modal}
+      {children}
+    </>
+  )
+}
+```
+
+* **`children`**: This slot receives the standard page content (`app/news/[newsSlug]/page.js`).
+* **`modal`**: This slot points to the `@modal` parallel folder. By default, when no sub-route of `@modal` is active, Next.js renders `app/news/[newsSlug]/@modal/default.js` (which returns `null` so nothing is shown).
+
+---
+
+### 3. How the Intercepting Route Works (`(.)image`)
+
+The notation `(.)` indicates that Next.js should intercept a route at the **same level** (sibling level in the folder structure). 
+
+In this case:
+* The `@modal` folder is a sibling to the `image` folder within `[newsSlug]`.
+* Inside `@modal`, the folder `(.)image` intercepts any client-side transition targeted at the `/news/[newsSlug]/image` path.
+
+---
+
+### 4. The Two Execution Scenarios
+
+#### Scenario A: Client-Side Navigation (Clicking the link)
+1. A user is reading the news article on `app/news/[newsSlug]/page.js`.
+2. They click the link to see the image:
+   ```javascript
+   <Link href={`/news/${newsItem.slug}/image`}>
+     <img src={`/images/news/${newsItem.image}`} alt={newsItem.title}/>
+   </Link>
+   ```
+3. Instead of navigating away and rendering the standalone `image/page.js`, Next.js **intercepts** this route because it matches the `(.)image` pattern.
+4. Next.js does two things:
+   * It updates the browser's URL bar to `/news/[newsSlug]/image`.
+   * It loads `app/news/[newsSlug]/@modal/(.)image/page.js` and injects it into the `{modal}` prop of your layout.
+5. As a result, the `<dialog>` modal component (`InterceptedImagePage`) displays **on top of** the current news details page (`children`), providing an overlay/modal UX.
+
+#### Scenario B: Direct URL Visit or Page Refresh (Hard Reload)
+1. If the user copies the URL `/news/some-slug/image` and opens it in a new tab, or performs a hard refresh while the modal is open:
+2. Because there is no existing client-side React state history to intercept from, Next.js ignores the interceptor.
+3. Instead, it falls back to standard routing and serves the actual `app/news/[newsSlug]/image/page.js` file directly.
+4. The user sees a fullscreen image layout without the article background.
+
+---
+
+### Summary of Interceptor Symbols in Next.js
+* **`(.)`** intercepts segments at the **same level**.
+* **`(..)`** intercepts segments **one level above**.
+* **`(..)(..)`** intercepts segments **two levels above**.
+* **`(...)`** intercepts segments from the **root** `app` directory.
+
+Programmatic navigation in nextjs:
+
+const router=useRouter()
+
+router.push("/news")
+
+
+**Route Groups:
+
+In Next.js, Route Groups allow you to organize your route segments and project files into logical folders without affecting the public URL path structure.
+To create a route group, you wrap a folder's name in parentheses: (folderName).
+
+Key Features of Route Groups
+Omitted from the URL: The folder name with parentheses is completely ignored by Next.js when generating URLs.
+Organize Code Logically: You can group related pages (e.g., marketing pages, authentication pages, dashboard pages) together.
+Apply Shared Layouts selectively: You can apply a layout to only a specific subset of routes by placing a layout.js inside the route group.
+Create Multiple Root Layouts: You can partition your application into completely different root layouts (e.g., one layout for the website and another for the dashboard app) by deleting the top-level app/layout.js and creating individual root layouts inside different route groups.
+
+Concrete Examples
+Example 1: Organizing folders without changing the URL
+If you want to group your login and registration pages together under an auth folder, but you don't want (/auth) to appear in the URL:
+
+text
+app/
+├── (auth)/
+│   ├── login/
+│   │   └── page.js     --> Accessible at: /login  (Not /auth/login)
+│   └── register/
+│       └── page.js     --> Accessible at: /register  (Not /auth/register)
+Example 2: Selective Layouts (Using multiple layouts)
+Suppose you want your marketing pages (/about, /contact) to share a navigation header, but your user dashboard page (/dashboard) to have a sidebar:
+
+text
+app/
+├── (marketing)/
+│   ├── layout.js       --> Shares a common layout (e.g., Navigation Header)
+│   ├── about/
+│   │   └── page.js     --> URL: /about (uses marketing layout)
+│   └── contact/
+│       └── page.js     --> URL: /contact (uses marketing layout)
+│
+├── (dashboard)/
+│   ├── layout.js       --> Shares a dashboard layout (e.g., Sidebar Navigation)
+│   └── page.js         --> URL: /dashboard (uses dashboard layout)
+Summary of Route Group folder notation:
+Folder name with parentheses (auth) $\rightarrow$ Route Group (Hidden from the URL path).
+Folder name without parentheses auth $\rightarrow$ Standard Route segment (Visible in the URL path, e.g., /auth/login).
+
+so as () are ommitted in url so the layout and page in dashboard are at root and they become the first layout and page which is loaded
+
+
+**Route Handlers:
+
+Route Handlers in Next.js are used to create backend API endpoints inside the App Router using a route.js (or route.ts) file.
+
+They allow you to handle HTTP requests such as:
+
+GET
+POST
+PUT
+DELETE
+PATCH
+Example Structure
+app
+ └── api
+      └── users
+           └── route.js
+Example
+export async function GET() {
+  return Response.json({
+    message: 'Hello World'
+  })
+}
+
+Accessed at:
+
+/api/users
+Use Cases
+Building APIs
+Handling form submissions
+Database operations
+Authentication
+Fetching/storing data
+Webhooks
+Important Points
+route.js replaces traditional API routes in the App Router.
+You cannot have both page.js and route.js at the same route segment level.
+
+
+
+**Middlewares:
+
+In Next.js, **Middleware** allows you to run code **before a request is completed**. It acts as a gatekeeper that intercepts incoming HTTP requests, allowing you to rewrite, redirect, modify headers, or even block the request entirely.
+
+Because Middleware runs on the **Edge Runtime** (a fast, lightweight environment), it executes extremely quickly—making it perfect for global features like authentication, redirects, and localization.
+
+---
+
+### Where is Middleware Defined?
+
+You define Middleware by creating a single file named **`middleware.js`** (or `middleware.ts`) in the **root directory** of your project (usually at the same level as your `app/` or `src/` folder).
+
+---
+
+### Common Use Cases
+1. **Authentication & Authorization**: Ensuring users are logged in before accessing private pages (like `/dashboard`).
+2. **Redirects & Rewrites**: Dynamically changing where a user is sent based on certain conditions.
+3. **Localization / Internationalization (i18n)**: Detecting a user's language preference and showing them the localized page.
+4. **A/B Testing & Feature Flags**: Showing different pages to different users for testing.
+
+---
+
+### Complete Code Example: Protected Routes (Authentication)
+
+Here is a practical, standard example of using Middleware to protect administrative or dashboard routes. If a user is not logged in, they are automatically redirected to `/login`.
+
+```javascript
+// middleware.js (created in the root or /src directory)
+
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  // 1. Retrieve the authentication token from the cookies
+  const authToken = request.cookies.get('session-token')?.value;
+
+  // 2. Define which path they are trying to access
+  const nextPath = request.nextUrl.pathname;
+
+  // 3. If they are trying to access a protected page (e.g., /dashboard) without a token
+  if (nextPath.startsWith('/dashboard')) {
+    if (!authToken) {
+      // Redirect them to the login page
+      const loginUrl = new URL('/login', request.url);
+      
+      // Bonus: Save the original URL they wanted to visit so we can redirect them back after logging in
+      loginUrl.searchParams.set('callbackUrl', nextPath);
+      
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // 4. If they have the token, or are accessing a public page, let the request proceed normally
+  return NextResponse.next();
+}
+
+// 5. The "Matcher" allows you to filter Middleware to run only on specific paths
+export const config = {
+  matcher: [
+    /*
+     * Match all paths starting with /dashboard
+     */
+    '/dashboard/:path*',
+  ],
+};
+```
+
+---
+
+### The Three Most Important Methods to Know
+
+When writing Middleware, you will return a **`NextResponse`** object using one of these key methods:
+
+1. **`NextResponse.next()`**
+   * **What it does**: Tells Next.js to proceed to the requested page or API route normally.
+   * **Use case**: Standard request allowance.
+
+2. **`NextResponse.redirect(url)`**
+   * **What it does**: Sends the user to a completely different URL. The browser's URL address bar **will change** to the new location.
+   * **Use case**: Authenticating users, legacy URL redirects.
+
+3. **`NextResponse.rewrite(url)`**
+   * **What it does**: Displays the page/content of a different URL, but keeps the **original URL** in the address bar (the user has no idea they've been rerouted).
+   * **Use case**: A/B testing, API proxying, custom subdomains.
+
+---
+
+### Why the `matcher` Configuration is Critical
+
+By default, Middleware will run for **every single request** in your application—including image assets, CSS files, JavaScript bundles, and static files. Running code on every single image request is extremely inefficient. 
+
+By adding the `config.matcher` object, you specify exactly which routes should trigger your Middleware:
+
+```javascript
+export const config = {
+  matcher: [
+    // Runs on /dashboard, /dashboard/settings, /dashboard/profile, etc.
+    '/dashboard/:path*', 
+    
+    // Runs on /profile but NOT on /profile/settings
+    '/profile', 
+  ],
+};
+```

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"] //instead of using ./ for roots use @ which refers to all the root folder and file
+    }
+  }
+}
