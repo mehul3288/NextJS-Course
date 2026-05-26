@@ -1,0 +1,23 @@
+# Dependencies
+# This ignores 'node_modules' recursively at the root level and any nested subdirectories
+node_modules/
+**/node_modules/
+
+# Next.js Build Outputs
+.next/
+out/
+build/
+
+# Production / Dependency lock files or local environment variables
+.env*.local
+.env
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db

@@ -654,3 +654,193 @@ export const config = {
   ],
 };
 ```
+
+
+--------------------------------------05-DataFetching-DeepDive--------------------------------------------------------------------------
+
+How to fetch data from an api in server component?
+In server component you can make the component as async which was not possible on the client side(although you can also use useEffect but for that you will have to make the component client component which defeats the purpose of using next js) and then you can execute your fetch api normally with await and it will not render the jsx code until it receive data.
+
+import NewsList from '@/component/news-list'
+import { DUMMY_NEWS } from '@/dummy-news'
+import Link from 'next/link'
+
+
+async function NewsPage() {
+    const res=await fetch("http://localhost:8080/news");
+    if(!res.ok){
+        throw new Error("Failed to fetch news")
+    }
+    const news=await res.json();
+    let newsContent;
+    //the news here will not be undefined until and unless api throws an error because it is an async function know so it will wait for the response and then only it will execute the jsx code
+    // if(news){
+    //     newsContent=<NewsList news={DUMMY_NEWS}/>
+    // }
+    return (
+        <>
+            <h1>News Page</h1>
+            <NewsList news={DUMMY_NEWS}/>
+        </>
+    )
+}
+
+export default NewsPage 
+
+
+For more granular loading state we can use suspense component if that component is fetching data we can show a fallback text until the data is loaded
+
+import NewsList from '@/component/news-list'
+import { getAvailableNewsMonths, getAvailableNewsYears, getNewsForYear, getNewsForYearAndMonth } from '@/lib/news'
+import Link from 'next/link';
+import React, { Suspense } from 'react'
+
+async function FilterHeader({year,month}){
+ const availbleYears = await getAvailableNewsYears();
+  let links = availbleYears
+  if ((year && !availbleYears.includes(year)) || (month && !getAvailableNewsMonths(year).includes(month))) {
+    throw new Error("Invalid filter.")
+  }
+  if (year && !month) {
+    links = getAvailableNewsMonths(year);
+  }
+  if (year && month) {
+    links = [];
+  }
+  return (
+     <header id="archive-header">
+        <nav>
+          <ul>
+            {links.map(link => {
+              const href = year ? `/archive/${year}/${link}` : `/archive/${link}`
+              return (<li key={link}>
+                <Link href={href}>{link}</Link>
+              </li>)
+            })}
+          </ul>
+        </nav>
+      </header>
+  )
+}
+
+async function FilteredNews({ year, month }) {
+  let news;
+  if (year && !month) {
+    news = await getNewsForYear(year)
+  } else if (year && month) {
+    news = await getNewsForYearAndMonth(year,month)
+  }
+  console.log(news);
+  
+
+  let newsContent = <p>No news found for that selected period.</p>
+  if (news && news.length > 0) {
+    newsContent = <NewsList news={news} />
+  }
+  return newsContent
+
+}
+
+async function FilteredNewsPage({ params }) {
+  const filter = params.filter
+  console.log(filter);
+  const selectedYear = filter?.[0];
+  const selectedMonth = filter?.[1];
+ 
+
+  
+  
+  return (
+    <>
+    <Suspense fallback={<p>Loading filters...</p>}>
+       <FilterHeader year={selectedYear} month={selectedMonth} />
+    </Suspense>
+     <Suspense fallback={<p>Loading news...</p>}>
+       <FilteredNews year={selectedYear} month={selectedMonth}/>
+     </Suspense>
+    </>
+  )
+  // const news=getNewsForYear(newsYear)
+  //   return (
+  //  <NewsList news={news}/>
+  //   )
+}
+
+export default FilteredNewsPage 
+
+
+----------------------06 Mutating DeepDive-----------------------------------------------------------------------------------
+
+action attribute in form by default defines the url where this formdata should be submitted on but in react it works differently. In react it is known as form action and it expects a function which will prevent the browser defualt behavior and executes that function on submit
+
+server action//
+
+import { storePost } from "@/lib/posts"
+import { redirect } from "next/navigation"
+
+export default function NewPostPage() {
+  //action bt default defines the url where this formdata should be submitted on but in react it works differently
+  //this will work but then we will have to convert this to client component
+  async function createPost(formData){
+    //this below it will tell component that it is server action and it will only execute on server and not on client no matter what you do. So when you submit the form it will behind the scene sent a request to itself and will trigger this function.
+    "use server"
+    const title=formData.get("title")
+    const image=formData.get("image")
+    const content=formData.get("content")
+    await storePost({
+      imageUrl:"",
+      title,
+      content,
+      userId:1
+    })
+    redirect("/feed")
+    console.log(title,image,content);
+  }
+
+
+  return (
+    <>
+      <h1>Create a new post</h1>
+      <form action={createPost} >
+        <p className="form-control">
+          <label htmlFor="title">Title</label>
+          <input type="text" id="title" name="title" />
+        </p>
+        <p className="form-control">
+          <label htmlFor="image">Image URL</label>
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            id="image"
+            name="image"
+          />
+        </p>
+        <p className="form-control">
+          <label htmlFor="content">Content</label>
+          <textarea id="content" name="content" rows="5" />
+        </p>
+        <p className="form-actions">
+          <button type="reset">Reset</button>
+          <button>Create Post</button>
+        </p>
+      </form>
+    </>
+  );
+}
+
+We can also store the server action in separate file and can import it from there. So that we don't have to make so much of adjustments to the component using that
+
+What's very important to understand about this directive is the following: It's just "telling" NextJS that something should become a server action. I.e., that NextJS should send requests to that function behind the scenes (kind of).
+
+"use server" does not mean or guarantee that the code will only execute on the server! Whilst that will be the case for server actions, you can't rely on the usage of "use server" to "hide code" from the client!
+
+If you have code that must never end up on the client-side (no matter if it's a server action or not), you should instead use the server-only package
+
+We can use the redirect from next/navigation to redirect to a page after user has submitted the form
+
+We can pass a server action function from a server component to a client component but we can't use them in same file as in above code if we use useFormState that component need to be converted to client component but because of that the server action won't run and it will cause a conflict so a component can be a server component or a client component not both. 
+
+
+
+We can use .env.local file to store the api keys and can access those keys using process.env.<api key property name>
+
