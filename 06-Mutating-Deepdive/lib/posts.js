@@ -76,6 +76,10 @@ export async function storePost(post) {
 }
 
 export async function updatePostLikeStatus(postId, userId) {
+  //To simulate error 
+  // await new Promise((reject) => setTimeout(reject, 3000));
+  // return;
+  // throw new Error("Failed to update like status")
   const stmt = db.prepare(`
     SELECT COUNT(*) AS count
     FROM likes

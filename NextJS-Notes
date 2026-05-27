@@ -844,3 +844,401 @@ We can pass a server action function from a server component to a client compone
 
 We can use .env.local file to store the api keys and can access those keys using process.env.<api key property name>
 
+You can also use formAction(which can call a server action) on a button as well 
+
+export default function LikeButton({action}) {
+  return (
+    <button formAction={action} className="like-button">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+      </svg>
+    </button>
+  );
+}
+
+
+How to pass an argument to an formAction?
+You can use bind method for that and for "this" pass as null and the second paramter is the arguments
+<form className={post.isLiked?'liked':''} action={togglePostLikeStatus.bind(null,post.id)}>
+              <LikeButton />
+            </form>
+            
+export async function togglePostLikeStatus(postId,formData){
+    await updatePostLikeStatus(postId,2);
+    //Nextjs caches data pretty aggresively and hence you won't se changes when data updates they are stored in the db but that page doesn't change becuase nextjs shows you cached pages and after only reload it will update it
+    revalidatePath("/feed")
+     //if you want to update all the pages you can use 
+    // revalidatePath("/","layout")
+}
+
+You will still get the formData as second argument over here
+
+----------------------------------------------------07-Understanding & Configuring caching------------------------------------------------
+
+NexJS Performs caching for this main area
+
+Request Memoization-> NextJS stores data requests with the same configuration. This avoids unnecessary duplicate data fetches. Cache only persisis during request duration.
+
+Data Cache-> NextJS Stores and reuses fetched data until it's revalidated. This avoids unnecessary requests to the data source and speeds up the application. The cache persists until its revalidated(manually or after a set time).
+
+Full Route Cache-> NextJS stores the renderend html and RSC at build time. This avoids unnecessary html render cycles and data fetches. The cache persists until the related data cache is revalidated.
+
+Router Cache-> NextJS stores the RSC payload in memory in the browser. This ensures extremely fast page transistions since no server request is needed.
+
+
+
+Request Memoizartion:
+When we send a request with same configuration to the backend it will memoize those request and if you try to load the page again that request will not be called again instead it will be serve from cache means that request won't even go to server
+
+With next version 14 we will see aggressive caching so in v14 only one request will be sent and if you refresh the page no new request will be sent but with next v15 it has changed it will send the request by default but we can configure that.
+
+Data cache: when using fetch function it will store the response data fetched from there in an internally managed server side cache and it will keep resuing that data forever until you tell it to not do that anymore. We can do that by using revalidatePath() after you have change some data. 
+
+The default cache settings with next versions:
+
+v14: Fetch function cache is set to force-cache and hence we get aggresive caching behavior
+v15: Fetch function cache is set to no-store and he.nce we get multiple api calls in when reloading or revisiting
+
+Expiry time of cache using fetch function:
+
+const response = await fetch('http://localhost:8080/messages',{
+    // cache:"no-store",
+    next:{
+      revalidate:5
+    }
+  });
+
+  //NextJS extends fetch function and hence it adds some extra feature to it one is next which takes an object and we can set a expiry time which says for how much time that cache is valid and after that time if a request is send it will fetch fresh data
+  
+You can also set this configuration file wide:
+This all reserve names nextjs is looking for so we need to export those constants. They will be applied to request sent from this file only. so its file wide
+file wide setting for revalidate cache time
+ export const revalidate=5;
+
+avoid caching all together file wide
+ export const dynamic="force-dynamic" //it is same as to "no-store" request sent using fetch function
+
+
+
+unstable_noStore (in future version might be only noStore):
+This will make sure that data is not cached and you will get the same effect as no-store and now you will get this effect just inside this component but in that component for all the request that might be send to any data source so if you have mulitple components in same page and you want to cache data for some component you can use this. This will disable caching for that specific component
+ 	
+export default async function MessagesPage() {
+	unstable_noStore();
+//...  Your component
+}
+
+
+
+Full Route Cache:
+When making a build you can see all the pages will be pre-rendered and it will be that pre-rendered pages we see out of the box and those pages are actually cached by nextjs so when you see in the application there are no logs because they were pre built during build process and then those pages are pre-rendered cached pages which are served. To invalidate it we can use revalidatePath() for dynamic changes and alternate way is if we set those consants like dynamic the rules will be appiled here. for e.g. if we set dynamic to force-dynamic it will fetch data for every load
+
+After the build we get to see this in the command prompt
+○  (Static)   prerendered as static content
+λ  (Dynamic)  server-rendered on demand using Node.js //without cache
+
+Revalidate:
+
+revalidatePath("/messages");
+This will revalidate only the page which is under messages folder and not its nested routes like message/blog(this will not be revalidated) to revalidate the nested paths as well we could use revalidatePath("/messages","layout") now this will revalidate /messages and all its nested pages by default is revalidatePath("/messages","page") to revalidate root wise use revalidatePath("/","layout") you can call revalidatePath multiple times to revalidate multiple paths revalidatePath("/messages");revalidatePath("/something")
+
+revalidateTag("msg");
+const res=await fetch("http://localhost:8080/messages",{next:{tags:["msg"]})
+So you can set tags to any request sent via fetch like this so this tags will under the hood be connected to the cached data and then if you call revalidateTag next js revalidate and will throw away the existing cache for that particular tag so this will allow you to clear the cache data of multiple pages if those pages would assign the same tag to their request so instead of using revalidatePath("") for different pages you can assign tags to multiple request on those pages and could use revalidateTag to revalidate mutliple pages at once
+
+    
+In Next.js Server Components, React's cache() can deduplicate repeated function calls during a single server render. If multiple components call the same cached function with the same arguments, the function executes only once and subsequent calls reuse the cached result. The cache is request-scoped and does not persist across page refreshes or separate requests.
+
+export const getMessages= cache(function getMessages() {
+  console.log('Fetching messages from db');
+  return db.prepare('SELECT * FROM messages').all();
+})
+
+single server request/render cycle?
+When a user opens a page in Next.js, the server starts rendering that page.
+During that one rendering process:
+layouts run
+server components run
+async data fetching runs
+database queries run
+All of this together is called a single server request/render cycle.
+
+const messages1 = await getMessages();
+const messages2 = await getMessages();
+
+<Page />
+  ├── <Sidebar />
+  │      └── getMessages()
+  │
+  └── <Chat />
+         └── getMessages()
+
+Without cache():         
+Fetching messages from db
+Fetching messages from db
+
+With cache():
+Fetching messages from db
+Only one DB call happens during that render.
+
+
+Then the server finishes rendering and sends HTML/RSC payload to the browser.
+At that point:
+the request lifecycle ends
+the cache() memory is cleared
+
+So if the user:
+refreshes,
+revisits,
+or makes another request,
+
+a new render cycle starts and the DB query runs again.
+
+User opens page
+   ↓
+Server starts rendering
+   ↓
+cache() works here
+   ↓
+Server finishes response
+   ↓
+cache cleared
+
+It is not a permanent cache like Redis or browser cache.
+
+Also when you revisit the page after navigating to another pages in spa scope it will then cache that route (page) and hence it will not re-render so no db call because it applies router caching. So once you visit a route that route gets added to router cache and then after revisiting it will use that cached page
+
+In App Router, Next.js caches previously visited route segments in the client router.
+
+So:
+
+Visit /messages
+→ Server renders page
+→ DB query runs
+
+Navigate to /about
+→ /messages stays in router cache
+
+Navigate back to /messages
+→ Next.js reuses cached RSC payload
+→ No new server request
+→ No DB query
+
+React cache()
+
+Prevents duplicate calls inside ONE render request.
+
+Next.js Router Cache
+
+Can reuse an entire previously rendered page between navigations.
+
+Just remember once the render cycle is completed susbequent request from the client side will not be served from cache it will call the database again
+
+Below is the sample code in which we have use getMessages()
+
+
+import { unstable_noStore } from 'next/cache';
+
+import Messages from '@/components/messages';
+import { getMessages } from '@/lib/messages';
+
+export default async function MessagesPage() {
+
+  const messages=getMessages()
+
+  if (!messages || messages.length === 0) {
+    return <p>No messages found</p>;
+  }
+
+  return <Messages messages={messages} />;
+}
+
+So now in order to store the data to data cache in nextjs so that once after running it will be server from cache so the data will be served from cache after refresh as well
+
+// Here nextCache (i.e. unstable_cache) is used to store the returned data in Next.js Data Cache.
+// This means the result is persisted across requests, so after a page refresh or new request,
+// the data can be served from cache instead of hitting the database again.
+// Alsi nextCache returns a function which on executing returns a promise so you will have to wrap the getMessages in async function and await it
+export const getMessages = nextCache(
+  // React cache() is used for request-level deduplication.
+  // If multiple components call this function during the same server render,
+  // it will execute only once and the result will be reused within that render cycle.
+  cache(async function getMessages() {
+    console.log('Fetching messages from db');
+    return db.prepare('SELECT * FROM messages').all();
+  }),
+  ["messages"]
+);
+
+// here "messages" is the cache key used internally by Next.js to identify and retrieve the cached data
+
+Revalidate:
+Way 1. And if you want to revalidate it you can use the same revalidatePath("/messages") and it will revalidate the /message route page 
+Way 2. To add a tag to the getMessages you can use configurtion object after passing the cache key which is {tags:["msg"]} and then use revalidateTag("msg")
+
+
+## Next.js Caching (React `cache` + `unstable_cache`)
+
+In Next.js, there are two important caching layers used for server data fetching:
+
+### 1. React `cache()` (Request Memoization)
+
+* Used to **deduplicate function calls during a single server render**
+* If multiple components call the same function in one request, it runs only once
+* Cache exists **only for that render cycle**
+* It is cleared once the server response is sent
+
+Example behavior:
+
+* Same request → reused result
+* New request / refresh → function runs again
+
+👉 Purpose: avoid duplicate DB/API calls during rendering
+
+---
+
+### 2. Next.js `unstable_cache()` (Data Cache)
+
+* Provides **persistent caching across requests**
+* Cached result can be reused even after page refresh or new requests
+* Works at the Next.js Data Cache level
+* Can be configured with `revalidate` for time-based refresh
+
+Example:
+
+```js
+import { unstable_cache as nextCache } from "next/cache";
+import { cache } from "react";
+export const getMessages= nextCache(
+  cache(async function getMessages() {
+  console.log('Fetching messages from db');
+  return db.prepare("SELECT * FROM messages").all()
+}),["messages"],{
+  revalidate:5
+}
+)
+
+If you want to use revalidate this cache function should be async 
+
+Behavior:
+
+* First request → fetch from DB
+* Next requests → served from cache
+* After `revalidate` time → cache is refreshed
+
+---
+
+### 3. Key Difference
+
+| Feature          | `cache()`                 | `unstable_cache()`                |
+| ---------------- | ------------------------- | --------------------------------- |
+| Scope            | Single request            | Cross-request (persistent)        |
+| Lifetime         | Per render cycle          | Stored in Next.js cache           |
+| Purpose          | Deduping calls            | Data caching                      |
+| Refresh behavior | Always reruns per request | Uses cached data until revalidate |
+
+---
+
+### 4. Important Note
+
+* `cache()` does NOT persist data between page refreshes
+* `unstable_cache()` DOES persist data across requests
+* They can be used together for **optimal performance (dedupe + persistence)**
+
+---
+
+----------------------------------------08-Optimisation------------------------------------------
+
+Images-> The next.js Image component extends HTML <img> element with features for automatic image optimization:
+Size Optimization: Automatically server correctly sized images for each device, using modern image formats like webp and avif
+Visual Stability: Prevent layout shift automatically when images are loading.
+Faster Pagel Loads: Images are only loaded when they enter the viewport using native browser lazy loading, with optional blur-up placeholders.
+Asset Flexibility: On-demand images resizing,even for images stored on remote servers.
+
+When importing the images like this 
+import logo from '@/assets/logo.png';
+because here logo is the image object and on that it has src property and you're accessing that and passing to img tag
+
+<img src={logo.src}/>
+
+but when using nextjs Image component you have to pass the logo object as it is and it will have some meta data about the image which will be used by Image  component to make some optimisation (for e.g. it has width and height property which can be used by Image component)
+
+<Image src={logo}/>
+
+You can set width and height as well but this is not the recommended way 
+
+<Image src={logo} width={100} height={100}/>
+
+the recommended way is to use sizes property
+
+<Image src={logo} sizes="10vw"/>
+It means take 10% of view port and it will enable nextjs to resize the image and deliver the appropriate image for different screen size. Although for a use case where we have fixed size image we can manually add the height and width that would be the better approach
+
+Images loading: By default images will be lazily loaded but we know that logo will be loaded above the fold so we need to fetch the image before hand so use priority attribute to load the image with high priority
+
+<Image src={logo} priority sizes="10vw"/>
+
+User uploaded images where we don't know width and height:
+You can use fill property which will fill the entire page but we don't want that so for this to work we need to add position relative to the image parent container and by default nextjs add position absolute to the images of the Image component so it will be relative to its parent and you have to set the height and width of parent 
+
+ <div className="post-image">
+        <Image src={post.image} fill alt={post.title} />
+      </div>
+      
+ .post-image{
+  position: relative;
+  width:8rem;
+  height: 6rem;
+}
+
+
+**What is a loader?**
+A `loader` in Next.js `<Image />` is a function that **generates the final image URL** before the image is requested from a server or CDN.
+
+### ⚙️ How it works
+
+* Next.js calls the loader automatically with an object:
+  { src, width, quality }
+* The loader returns a **custom URL string**
+* That URL is used by the browser to fetch the image
+
+
+### 🔄 Flow
+
+1. `<Image />` renders in React
+2. Next.js calls `loader(config)`
+3. Loader builds optimized image URL
+4. Browser downloads image from that URL
+
+### 🎯 Why use a loader?
+
+* To use **external image services** (e.g., Cloudinary, Imgix)
+* To apply **custom transformations** (resize, quality, format)
+* To override Next.js default image optimization
+* To have **full control over image delivery**
+
+### 💡 Key idea
+
+> Loader = “custom URL builder for images”
+
+        <div className="post-image">
+        {/* quality should be 0 to 100 */}
+        <Image src={post.image} loader={imageLoader} fill alt={post.title} quality={50}/>
+      </div>
+
+
+function imageLoader({ src, quality }) {
+  const [urlStart, urlEnd] = src.split("upload/");
+  return `${urlStart}upload/w_200,q_${quality || 75}/${urlEnd}`;
+}
+
+
+
+
+
+
+

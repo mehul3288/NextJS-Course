@@ -1,8 +1,9 @@
 "use server"
 
 import { uploadImage } from "@/lib/cloudinary"
+import { revalidatePath } from "next/cache"
 
-const { storePost } = require("@/lib/posts")
+const { storePost, updatePostLikeStatus } = require("@/lib/posts")
 const { redirect } = require("next/navigation")
 
 export async function createPost(prevState, formData) {
@@ -36,5 +37,15 @@ export async function createPost(prevState, formData) {
         content,
         userId: 1
     })
+    revalidatePath("/","layout");
     redirect("/feed")
+}
+
+export async function togglePostLikeStatus(postId,formData){
+    await updatePostLikeStatus(postId,2);
+    //Nextjs caches data pretty aggresively and hence you won't se changes when data updates they are stored in the db but that page doesn't change becuase nextjs shows you cached pages and after only reload it will update it
+    revalidatePath("/feed")
+
+    //if you want to update all the pages you can use 
+    // revalidatePath("/","layout")
 }
