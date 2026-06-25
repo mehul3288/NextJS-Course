@@ -1,0 +1,194 @@
+{
+  "users": [
+    {
+      "name": "Mehul Rathod",
+      "email": "mehulr286@gmail.com",
+      "password": "$2a$10$05rEMtatYzX6fLUQgQAOcucsyZ769qllqI/0/49LmNEzGmN91HH3e",
+      "id": "2j-s_5uEP3E",
+      "role": "seller"
+    }
+  ],
+  "favroites": {},
+  "cart": {
+    "2j-s_5uEP3E": []
+  },
+  "address": {
+    "2j-s_5uEP3E": [
+      {
+        "id": "1781167229604d266746ce91a78",
+        "fullName": "Mehul Rathod",
+        "phone": "7021356391",
+        "pincode": "421301",
+        "address": "Near sai baba mandir, Syndicate,",
+        "city": "Kalyan",
+        "state": "Maharashtra"
+      }
+    ]
+  },
+  "orders": {
+    "2j-s_5uEP3E": [
+      {
+        "id": "17815041427662823f863676ae",
+        "userId": "2j-s_5uEP3E",
+        "items": [
+          {
+            "_id": "17815035762378a11e78282b2d",
+            "userId": "user_dummy",
+            "name": "Sony Boat",
+            "description": "boast is as goo",
+            "price": 15,
+            "offerPrice": 12,
+            "image": [
+              "https://res.cloudinary.com/de5lbyspo/image/upload/v1781503571/E-Commerce/eqdx3gv17xp8iihimbzc.webp",
+              "https://res.cloudinary.com/de5lbyspo/image/upload/v1781503575/E-Commerce/rermtlevkhoqcw7qttae.webp"
+            ],
+            "category": "Headphone",
+            "date": 1781503576237,
+            "__v": 0,
+            "quantity": 1,
+            "totalPrice": "12.00"
+          }
+        ],
+        "address": {
+          "id": "1781167229604d266746ce91a78",
+          "fullName": "Mehul Rathod",
+          "phone": "7021356391",
+          "pincode": "421301",
+          "address": "Near sai baba mandir, Syndicate,",
+          "city": "Kalyan",
+          "state": "Maharashtra"
+        },
+        "totalPrice": 12,
+        "amount": 12,
+        "paymentMethod": "COD",
+        "paymentStatus": "Pending",
+        "date": 1781504142766
+      },
+      {
+        "id": "1781498038202d8440a0d9abb08",
+        "userId": "2j-s_5uEP3E",
+        "items": [
+          {
+            "_id": "67a1f5993f34a77b6dde914e",
+            "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+            "name": "Garmin Venu 2",
+            "description": "The Garmin Venu 2 smartwatch blends advanced fitness tracking with sophisticated design, offering a wealth of features such as heart rate monitoring, GPS, and sleep tracking. Built with a 24-hour battery life, this watch is ideal for fitness enthusiasts and anyone looking to enhance their daily lifestyle. With a stunning AMOLED display and customizable watch faces, the Venu 2 combines technology with style seamlessly.",
+            "price": 399.99,
+            "offerPrice": 349.99,
+            "image": [
+              "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/hdfi4u3fmprazpnrnaga.webp"
+            ],
+            "category": "Earphone",
+            "date": 1738667417511,
+            "__v": 0,
+            "quantity": 1,
+            "totalPrice": "355.99"
+          }
+        ],
+        "address": {
+          "id": "1781167229604d266746ce91a78",
+          "fullName": "Mehul Rathod",
+          "phone": "7021356391",
+          "pincode": "421301",
+          "address": "Near sai baba mandir, Syndicate,",
+          "city": "Kalyan",
+          "state": "Maharashtra"
+        },
+        "totalPrice": 355.99,
+        "amount": 355.99,
+        "paymentMethod": "COD",
+        "paymentStatus": "Pending",
+        "date": 1781498038202
+      },
+      {
+        "id": "1781180671785ff7b9ec7f8fd3",
+        "userId": "2j-s_5uEP3E",
+        "items": [
+          {
+            "_id": "67a1f52e3f34a77b6dde914a",
+            "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+            "name": "Bose QuietComfort 45",
+            "description": "The Bose QuietComfort 45 headphones are engineered for exceptional sound quality and unparalleled noise cancellation. With a 24-hour battery life and comfortable, lightweight design, these headphones deliver premium audio for any environment. Whether on a flight, in the office, or at home, the Bose QC45 blocks out distractions, offering an immersive listening experience.",
+            "price": 429.99,
+            "offerPrice": 329.99,
+            "image": [
+              "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/m16coelz8ivkk9f0nwrz.webp"
+            ],
+            "category": "Headphone",
+            "date": 1738667310300,
+            "__v": 0,
+            "quantity": 1,
+            "totalPrice": "335.99"
+          },
+          {
+            "_id": "67a1f5663f34a77b6dde914c",
+            "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+            "name": "Samsung Galaxy S23",
+            "description": "The Samsung Galaxy S23 offers an all-encompassing mobile experience with its advanced AMOLED display, offering vibrant visuals and smooth interactions. Equipped with top-of-the-line fitness tracking features and cutting-edge technology, this phone delivers outstanding performance. With powerful hardware, a sleek design, and long battery life, the S23 is perfect for those who demand the best in mobile innovation.",
+            "price": 899.99,
+            "offerPrice": 799.99,
+            "image": [
+              "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/xjd4eprpwqs7odbera1w.webp"
+            ],
+            "category": "Smartphone",
+            "date": 1738667366224,
+            "__v": 0,
+            "quantity": 2,
+            "totalPrice": "1630.98"
+          }
+        ],
+        "address": {
+          "id": "1781167229604d266746ce91a78",
+          "fullName": "Mehul Rathod",
+          "phone": "7021356391",
+          "pincode": "421301",
+          "address": "Near sai baba mandir, Syndicate,",
+          "city": "Kalyan",
+          "state": "Maharashtra"
+        },
+        "totalPrice": 1967.97,
+        "amount": 1967.97,
+        "paymentMethod": "COD",
+        "paymentStatus": "Pending",
+        "date": 1781180671785
+      },
+      {
+        "id": "178117974228221f2a6362264d8",
+        "userId": "2j-s_5uEP3E",
+        "items": [
+          {
+            "_id": "67a1f52e3f34a77b6dde914a",
+            "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+            "name": "Bose QuietComfort 45",
+            "description": "The Bose QuietComfort 45 headphones are engineered for exceptional sound quality and unparalleled noise cancellation. With a 24-hour battery life and comfortable, lightweight design, these headphones deliver premium audio for any environment. Whether on a flight, in the office, or at home, the Bose QC45 blocks out distractions, offering an immersive listening experience.",
+            "price": 429.99,
+            "offerPrice": 329.99,
+            "image": [
+              "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/m16coelz8ivkk9f0nwrz.webp"
+            ],
+            "category": "Headphone",
+            "date": 1738667310300,
+            "__v": 0,
+            "quantity": 1,
+            "totalPrice": "335.99"
+          }
+        ],
+        "address": {
+          "id": "1781167229604d266746ce91a78",
+          "fullName": "Mehul Rathod",
+          "phone": "7021356391",
+          "pincode": "421301",
+          "address": "Near sai baba mandir, Syndicate,",
+          "city": "Kalyan",
+          "state": "Maharashtra"
+        },
+        "totalPrice": 335.99,
+        "amount": 335.99,
+        "paymentMethod": "COD",
+        "paymentStatus": "Pending",
+        "date": 1781179742282
+      }
+    ]
+  },
+  "$schema": "./node_modules/json-server/schema.json"
+}
