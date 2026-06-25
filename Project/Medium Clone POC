@@ -1,0 +1,122 @@
+Landing Page -Get Started(which will login or signup the users)
+Onbarding filter(Optional)
+Home page (Trending Featured) Left side, Right side-> Admin picks;
+Blog page (Should only contain half access like medium and upon login then only they should be able to read full article, Comments section, Like functionality,
+Write Blogs (Upload photos(main banner and also content related photos), comment section)
+mini components (content image, Border highlight, code tag, Main header, subheader level1 levle2, list tag, normal content(p tag should also have one itlaic styling option),) Highlighting(on the user side) and also user can add comment for that highlighted part. link component
+Top Navbar->Icon, search, write, Profile, library
+Explore page->
+Serach Result page
+Profile page-> Your articles, personal info,
+library-> HIghlighted articles section, liked article, bookmarked
+
+
+
+Admin(Panel)
+Configuration:
+Hand Picked article (Right side of home page)
+Delete the concern raised blog(Raised flags and admin will review it(either) he can delete or he can suspend it);
+COnfiguration of mini components(which to keep and which to remove)
+Banner content will be done by admin
+User List, -> Admin can set role, disbale write access
+Ban a user(all its content would be banned) or ban a particular content. 
+Configure landing page banner and all
+
+
+User Table:->
+user info,
+role:
+isSuspended:
+blogs-id:[],
+liked article:
+Highlighted:
+bookmarks:[{userId,blogId}]
+
+
+blogs table:->
+blogs info,
+comments: {id,blogId,userId,content}
+like:[{ userId, blogId}]
+user-id:
+isSuspeneded:
+highlighted section: along with comments(optional)
+
+Admin Configurations:
+Banner content:
+Hand picked article:[]
+configuration of mini components:
+Blacklisted user:[]
+Blacklisted content:[]
+Flagged Content: [{user id,blog id}]
+
+
+
+Database POC:
+Users
+{
+ id
+ name
+ email
+ role
+ isSuspended
+ writeAccess
+ createdAt
+ bookmarks,
+}
+
+
+Blogs
+{
+ id
+ title
+ slug
+ bannerImage
+ content,
+ author
+ authorId
+ category,
+ tags
+ isPublished
+ isSuspended
+ likesCount
+ createdAt
+"readingTime": 0,
+}
+
+Comments
+{
+ id
+ blogId
+ userId
+ content
+}
+
+Highlight
+{
+ id
+ userId
+ blogId
+ selectedText
+ note
+}
+
+Flag
+{
+ id
+ userId
+ blogId
+ reason
+ status
+}
+
+Config
+{
+ banner
+ adminPicks
+ editorSettings
+}
+
+
+
+
+ 

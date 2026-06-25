@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": "FvknUslSAZ4",
+      "name": "Mehul Rathod",
+      "email": "mehulr286@gmail.com",
+      "employeeId": "EMP12345",
+      "password": "$2b$10$WPOMKoF4js4gSurJZif8peBSNMhvq9ELXOHqyFlGa2XvlwGUyf/N6",
+      "role": "admin"
+    }
+  ],
+  "rooms": [],
+  "bookings": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}

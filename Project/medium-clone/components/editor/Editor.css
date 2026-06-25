@@ -1,0 +1,238 @@
+/* ─── EditorJS Medium-like overrides ─────────────────────────────────────── */
+
+/* Remove EditorJS default border / box */
+#editorjs-holder .codex-editor {
+    padding: 0;
+}
+
+/* The inner content area */
+#editorjs-holder .codex-editor__redactor {
+    padding-bottom: 200px !important;
+    /* lots of breathing room below */
+    margin: 0 !important;
+}
+
+/* ─── Placeholder ─────────────────────────────────────────────────────────── */
+#editorjs-holder .ce-paragraph[data-placeholder]:empty::before {
+    color: #becab6;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 20px;
+    line-height: 32px;
+    font-weight: 400;
+}
+
+/* ─── Paragraph blocks ────────────────────────────────────────────────────── */
+#editorjs-holder .ce-paragraph {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 20px;
+    line-height: 32px;
+    color: #1a1c1c;
+    padding: 2px 0;
+    caret-color: #006e05;
+}
+
+@media (max-width: 768px) {
+    #editorjs-holder .ce-paragraph {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+/* ─── Headings ────────────────────────────────────────────────────────────── */
+#editorjs-holder h1.ce-header,
+#editorjs-holder .ce-header[data-level="1"] {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #1a1c1c;
+    margin: 24px 0 8px;
+    padding: 0;
+}
+
+#editorjs-holder h2.ce-header,
+#editorjs-holder .ce-header[data-level="2"] {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1a1c1c;
+    margin: 20px 0 6px;
+    padding: 0;
+}
+
+#editorjs-holder h3.ce-header,
+#editorjs-holder .ce-header[data-level="3"] {
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    color: #1a1c1c;
+    margin: 16px 0 4px;
+    padding: 0;
+}
+
+/* ─── Blockquote ──────────────────────────────────────────────────────────── */
+#editorjs-holder .cdx-quote {
+    border-left: 3px solid #1a8917;
+    margin: 24px 0;
+    padding: 4px 0 4px 24px;
+}
+
+#editorjs-holder .cdx-quote__text {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 22px;
+    line-height: 34px;
+    font-weight: 400;
+    font-style: italic;
+    color: #1a1c1c;
+    min-height: unset;
+}
+
+#editorjs-holder .cdx-quote__caption {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #5f5e5e;
+    margin-top: 8px;
+}
+
+/* ─── Lists ───────────────────────────────────────────────────────────────── */
+#editorjs-holder .cdx-list {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 20px;
+    line-height: 32px;
+    color: #1a1c1c;
+    padding-left: 28px;
+}
+
+#editorjs-holder .cdx-list__item {
+    padding: 2px 0;
+}
+
+/* ─── Images ──────────────────────────────────────────────────────────────── */
+#editorjs-holder .image-tool {
+    margin: 32px 0;
+}
+
+#editorjs-holder .image-tool__image {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#editorjs-holder .image-tool__image img {
+    max-width: 100%;
+    display: block;
+}
+
+#editorjs-holder .image-tool__caption[contenteditable] {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #5f5e5e;
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* ─── Toolbar (the + button) ─────────────────────────────────────────────── */
+#editorjs-holder .ce-toolbar__plus {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #becab6;
+    color: #5f5e5e;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+#editorjs-holder .ce-toolbar__plus:hover {
+    border-color: #006e05;
+    color: #006e05;
+}
+
+#editorjs-holder .ce-toolbar__plus svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Settings button (gear) */
+#editorjs-holder .ce-toolbar__settings-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #becab6;
+    color: #5f5e5e;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+#editorjs-holder .ce-toolbar__settings-btn:hover {
+    border-color: #006e05;
+    color: #006e05;
+}
+
+/* ─── Inline toolbar (bold/italic/link popup) ─────────────────────────────── */
+#editorjs-holder .ce-inline-toolbar {
+    background: #2f3131;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    padding: 4px;
+}
+
+#editorjs-holder .ce-inline-toolbar__buttons {
+    gap: 2px;
+}
+
+#editorjs-holder .ce-inline-tool {
+    color: #f0f1f1;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+#editorjs-holder .ce-inline-tool:hover,
+#editorjs-holder .ce-inline-tool--active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #90fb7c;
+}
+
+/* ─── Block tunes / settings popover ─────────────────────────────────────── */
+#editorjs-holder .ce-popover {
+    border-radius: 8px;
+    border: 1px solid #becab6;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+}
+
+#editorjs-holder .ce-popover-item:hover,
+#editorjs-holder .ce-popover-item--active {
+    background: #f3f3f4;
+}
+
+#editorjs-holder .ce-popover-item__icon {
+    color: #006e05;
+}
+
+/* ─── Block focus highlight ───────────────────────────────────────────────── */
+#editorjs-holder .ce-block--selected .ce-block__content,
+#editorjs-holder .ce-block:hover .ce-block__content {
+    background: transparent;
+}
+
+/* ─── Remove any default EditorJS borders/padding ────────────────────────── */
+#editorjs-holder .codex-editor--narrow .ce-toolbar__plus {
+    left: -40px;
+}

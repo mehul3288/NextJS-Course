@@ -1,0 +1,339 @@
+{
+  "users": [
+    {
+      "name": "Mehul Rathod",
+      "email": "mehulr286@gmail.com",
+      "password": "$2b$10$QbhST.gMa2vCktx0W5jYiOv8xJ6rAC.se.OgQljvLCYs4bjVj1K6.",
+      "bio": "Hey There Mehul here ",
+      "createdAt": 1780386605849,
+      "blogIds": [
+        "MPXsupaSIS0",
+        "p7Ta5UVLhHo",
+        "8_c6T_6PK9c",
+        "BDcVmU4fQBY",
+        "V2GO8PFuwR8",
+        "oCJ9ZbKI44Q",
+        "i6OMe79Nzv0",
+        "Xgy588emSOY",
+        "WK0-LwvZxzs",
+        "ISFKAuHcXv8",
+        "EO_2EUmGc5k",
+        "mzgdycr36N0"
+      ],
+      "id": "jyBVYP4Jye8"
+    },
+    {
+      "name": "Akshay Aher",
+      "email": "akshay.aher@gmail.com",
+      "password": "$2b$10$LHMDO0RNbY15ay57WTawQOouGab1Eb7IPCEBAb5Odgt7zxVz6KUoq",
+      "bio": "Hey Akshay here",
+      "createdAt": 1780386749984,
+      "blogIds": [],
+      "id": "0Z3Lh9KPPpI"
+    }
+  ],
+  "blogs": [
+    {
+      "title": "Mehul Rathod",
+      "slug": "mehul-rathod-1780493796361",
+      "content": {
+        "time": 1780493947654,
+        "blocks": [
+          {
+            "id": "O34d0BB15j",
+            "type": "paragraph",
+            "data": {
+              "text": "Hey How"
+            }
+          },
+          {
+            "id": "SAcCzYT4Sv",
+            "type": "image",
+            "data": {
+              "caption": "Hey This is imdb clone",
+              "withBorder": false,
+              "withBackground": false,
+              "stretched": false,
+              "file": {
+                "url": "http://localhost:5000/uploads/img-1780493774672.png"
+              }
+            }
+          },
+          {
+            "id": "wMNTh0-8gD",
+            "type": "quote",
+            "data": {
+              "text": "QUOTED",
+              "caption": "Mehul",
+              "alignment": "left"
+            }
+          }
+        ],
+        "version": "2.31.6"
+      },
+      "author": "Mehul Rathod",
+      "authorId": "jyBVYP4Jye8",
+      "category": "",
+      "tags": [],
+      "isPublished": true,
+      "isSuspended": false,
+      "likesCount": 0,
+      "createdAt": "2026-06-03T13:36:36.361Z",
+      "id": "WK0-LwvZxzs"
+    },
+    {
+      "title": "Testing",
+      "slug": "testing-1780493969317",
+      "content": {
+        "time": 1780493968210,
+        "blocks": [
+          {
+            "id": "4L-dQqExd-",
+            "type": "paragraph",
+            "data": {
+              "text": "Tessttttttt"
+            }
+          }
+        ],
+        "version": "2.31.6"
+      },
+      "author": "Mehul Rathod",
+      "authorId": "jyBVYP4Jye8",
+      "category": "",
+      "tags": [],
+      "isPublished": true,
+      "isSuspended": false,
+      "likesCount": 0,
+      "createdAt": "2026-06-03T13:39:29.317Z",
+      "id": "ISFKAuHcXv8"
+    },
+    {
+      "title": "Is MCP Dead?",
+      "slug": "is-mcp-dead-1780553900369",
+      "content": {
+        "time": 1780916618835,
+        "blocks": [
+          {
+            "id": "kL7qUjmGRT",
+            "type": "header",
+            "data": {
+              "text": "Why you should avoid using MCP in Claude Code and what to use instead",
+              "level": 2
+            }
+          },
+          {
+            "id": "zG5ApQHYZm",
+            "type": "paragraph",
+            "data": {
+              "text": "Model Context Protocol (MCP) is an open-source standard that allows AI models to seamlessly connect with external data sources, tools, and software systems."
+            }
+          },
+          {
+            "id": "jOfZ9RAcp7",
+            "type": "quote",
+            "data": {
+              "text": "MCP is a plug-and-play technology, like USB, but for AI.",
+              "caption": "Akshay",
+              "alignment": "left"
+            }
+          },
+          {
+            "id": "z_rywBnrkk",
+            "type": "image",
+            "data": {
+              "caption": "MCP Architecture",
+              "withBorder": false,
+              "withBackground": false,
+              "stretched": false,
+              "file": {
+                "url": "http://localhost:5000/uploads/img-1780553562868.webp"
+              }
+            }
+          },
+          {
+            "id": "_PI7RnUeb4",
+            "type": "paragraph",
+            "data": {
+              "text": "Despite all the benefits that MCP brings to daily interactions with AI, this technology has 5 critical problems that make it less usable in real product design work."
+            }
+          },
+          {
+            "id": "nktp9-M7NH",
+            "type": "paragraph",
+            "data": {
+              "text": "In this article, I want to explain 5 reasons why using MCP is a&nbsp;<i>bad</i>&nbsp;idea and what you should use instead."
+            }
+          },
+          {
+            "id": "nxYs8wC_pm",
+            "type": "header",
+            "data": {
+              "text": "Problem #1: MCP Adds Extra Level of Complexity",
+              "level": 2
+            }
+          },
+          {
+            "id": "CVp0bMZhhO",
+            "type": "paragraph",
+            "data": {
+              "text": "MCP is typically compared to API."
+            }
+          },
+          {
+            "id": "W3nNyUQjjC",
+            "type": "quote",
+            "data": {
+              "text": "API (Application Programming Interface) is a set of rules and protocols that allows different software applications to communicate and exchange data.",
+              "caption": "",
+              "alignment": "left"
+            }
+          },
+          {
+            "id": "YpXofNRzDd",
+            "type": "paragraph",
+            "data": {
+              "text": "When MCP was released on the market, many tech folks said that MCP feels like the right way to work with 3rd party services and API is <i>“so outdated, so old-fashioned way of doing things.”</i>"
+            }
+          },
+          {
+            "id": "O9mk3cUYfQ",
+            "type": "paragraph",
+            "data": {
+              "text": "But when you use MCP, it introduces a protocol layer between the LLM (e.g., Claude) and external tools (i.e., Notion). Quite often, this leads to an overly complex interaction between Claude and the 3rd tool. And that leads to less precise control over execution, harder debugging, and unpredictable behavior depending on how the model interprets tools."
+            }
+          },
+          {
+            "id": "Wgskut-wUm",
+            "type": "paragraph",
+            "data": {
+              "text": "The reason why all is happening is simple. When you use an API, you follow a specific, well-defined set of rules that 3rd-party tools expect to work with."
+            }
+          },
+          {
+            "id": "JOxv9P9RSz",
+            "type": "image",
+            "data": {
+              "caption": "API Request Example",
+              "withBorder": false,
+              "withBackground": false,
+              "stretched": false,
+              "file": {
+                "url": "http://localhost:5000/uploads/img-1780553804493.webp"
+              }
+            }
+          },
+          {
+            "id": "dVPo9PlQsx",
+            "type": "paragraph",
+            "data": {
+              "text": "When you use MCP, LLM has to figure out the rules in real time, and this leads to more configuration and more moving parts (the new layer MCP in the diagram below handles this). And more things that can break."
+            }
+          },
+          {
+            "id": "6TZeh88X6h",
+            "type": "paragraph",
+            "data": {
+              "text": "Press enter or click to view image in full size"
+            }
+          },
+          {
+            "id": "YrIC8G9uM5",
+            "type": "image",
+            "data": {
+              "caption": "MCP Architecture",
+              "withBorder": false,
+              "withBackground": false,
+              "stretched": false,
+              "file": {
+                "url": "http://localhost:5000/uploads/img-1780916611789.webp"
+              }
+            }
+          }
+        ],
+        "version": "2.31.6"
+      },
+      "author": "Mehul Rathod",
+      "authorId": "jyBVYP4Jye8",
+      "category": "science",
+      "tags": [],
+      "isPublished": true,
+      "isSuspended": false,
+      "likesCount": 0,
+      "createdAt": "2026-06-04T06:18:20.369Z",
+      "id": "EO_2EUmGc5k",
+      "bannerImage": "http://localhost:5000/uploads/img-1780916810189.webp"
+    },
+    {
+      "title": "Test",
+      "slug": "test-1780555210244",
+      "content": {
+        "time": 1780555205351,
+        "blocks": [
+          {
+            "id": "X_eTx46KDp",
+            "type": "list",
+            "data": {
+              "style": "unordered",
+              "meta": {},
+              "items": [
+                {
+                  "content": "Mehul",
+                  "meta": {},
+                  "items": []
+                },
+                {
+                  "content": "There",
+                  "meta": {},
+                  "items": []
+                },
+                {
+                  "content": "How are you",
+                  "meta": {},
+                  "items": []
+                }
+              ]
+            }
+          },
+          {
+            "id": "rvJZ2cENW8",
+            "type": "list",
+            "data": {
+              "style": "ordered",
+              "meta": {
+                "counterType": "numeric"
+              },
+              "items": [
+                {
+                  "content": "Mehul ",
+                  "meta": {},
+                  "items": []
+                },
+                {
+                  "content": "there",
+                  "meta": {},
+                  "items": []
+                },
+                {
+                  "content": "how a",
+                  "meta": {},
+                  "items": []
+                }
+              ]
+            }
+          }
+        ],
+        "version": "2.31.6"
+      },
+      "author": "Mehul Rathod",
+      "authorId": "jyBVYP4Jye8",
+      "category": "",
+      "tags": [],
+      "isPublished": true,
+      "isSuspended": false,
+      "likesCount": 0,
+      "createdAt": "2026-06-04T06:40:10.244Z",
+      "id": "mzgdycr36N0"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

@@ -3,8 +3,9 @@ import { formatDate } from '@/lib/format';
 import LikeButton from './like-icon';
 import { togglePostLikeStatus } from '@/actions/posts';
 import { useOptimistic } from 'react';
+import { useRouter } from 'next/navigation';
 
-function Post({ post,action }) {
+function Post({ post, action }) {
   return (
     <article className="post">
       <div className="post-image">
@@ -22,7 +23,7 @@ function Post({ post,action }) {
             </p>
           </div>
           <div>
-            <form className={post.isLiked?'liked':''} action={action.bind(null,post.id)}>
+            <form className={post.isLiked ? 'liked' : ''} action={action.bind(null, post.id)}>
               <LikeButton />
             </form>
           </div>
@@ -34,37 +35,40 @@ function Post({ post,action }) {
 }
 
 export default function Posts({ posts }) {
-  const [optimisticPosts,updateOptimisticPosts]=useOptimistic(posts,(prevPosts,updatedPostId)=>{
-    const updatedPostIndex=prevPosts.findIndex(post=>post.id===updatedPostId);
-    if(updatedPostIndex===-1){
+  const router=useRouter();
+  const [optimisticPosts, updateOptimisticPosts] = useOptimistic(posts, (prevPosts, updatedPostId) => {
+    const updatedPostIndex = prevPosts.findIndex(post => post.id === updatedPostId);
+    if (updatedPostIndex === -1) {
       return prevPosts
     }
-    const updatedPost={...prevPosts[updatedPostIndex]};
-    updatedPost.likes=updatedPost.likes+(updatedPost.isLiked?-1:1);
-    updatedPost.isLiked=!updatedPost.isLiked
-    const newPosts=[...prevPosts];
-    newPosts[updatedPostIndex]=updatedPost;
+    const updatedPost = { ...prevPosts[updatedPostIndex] };
+    updatedPost.likes = updatedPost.likes + (updatedPost.isLiked ? -1 : 1);
+    updatedPost.isLiked = !updatedPost.isLiked
+    const newPosts = [...prevPosts];
+    newPosts[updatedPostIndex] = updatedPost;
     return newPosts;
   })
   if (!optimisticPosts || optimisticPosts.length === 0) {
     return <p>There are no posts yet. Maybe start sharing some?</p>;
   }
 
-  async function updatePost(postId){
+  async function updatePost(postId) {
     updateOptimisticPosts(postId);
-    try{
-await togglePostLikeStatus(postId);
-    }catch(error){
-alert(error);
+    try {
+      await togglePostLikeStatus(postId);
+    } catch (error) {
+      alert(error);
     }
   }
 
   return (
     <ul className="posts">
+      <li><button onMouseEnter={() => { router.prefetch("/new-post")}}>Prefetch</button></li>
       {optimisticPosts.map((post) => (
         <li key={post.id}>
           <Post post={post} action={updatePost} />
         </li>
+
       ))}
     </ul>
   );

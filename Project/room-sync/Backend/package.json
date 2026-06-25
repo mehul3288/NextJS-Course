@@ -1,0 +1,19 @@
+{
+  "name": "meeting-room-booking-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "json-server": "json-server --watch db.json --port 3002"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3"
+  }
+}
